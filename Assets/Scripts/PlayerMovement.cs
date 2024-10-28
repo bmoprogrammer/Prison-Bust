@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -9,10 +10,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float runSpeed = 10f;
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
+    Animator myAnimator;
 
     void Start()
     {
+        // Cache references to the Rigidbody2D and Animator objects.
         myRigidbody = GetComponent<Rigidbody2D>();
+        myAnimator = GetComponent<Animator>();
     }
 
     
@@ -33,6 +37,14 @@ public class PlayerMovement : MonoBehaviour
         // then grab the velocity of the y axis. It doesn't matter in this case since you can't run vertically
         Vector2 playerVelocity = new(moveInput.x * runSpeed, myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;
+
+        // Check to see if player is running. If they are, set running animation to true. Otherwise idle.
+        if(Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon)
+        {
+            myAnimator.SetBool("isRunning", true);
+        } else {
+            myAnimator.SetBool("isRunning", false);
+        }
     }
 
     void FlipSprite()
