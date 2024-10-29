@@ -11,36 +11,43 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpSpeed = 23f;
     [SerializeField] float climbSpeed = 7.5f;
     float playerGravity;
+    bool isAlive = true;
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
     Animator myAnimator;
-    CapsuleCollider2D myCollider;
+    CapsuleCollider2D myBodyCollider;
+    BoxCollider2D myFeetCollider;
 
     void Start()
     {
         // Cache references to the Rigidbody2D, Animator, CapsuleCollider2D objects, and gravity.
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
-        myCollider = GetComponent<CapsuleCollider2D>();
+        myBodyCollider = GetComponent<CapsuleCollider2D>();
+        myFeetCollider = GetComponent<BoxCollider2D>();
         playerGravity = myRigidbody.gravityScale;
     }
 
     
     void Update()
     {
+        if(!isAlive) {return;}
         Run();
         FlipSprite();
         ClimbLadder();
+        Die();
     }
 
     void OnMove(InputValue value)
     {
+        if(!isAlive) {return;}
         moveInput = value.Get<Vector2>();
     }
 
     void OnJump(InputValue value)
     {
-        if(!myCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){return;}
+        if(!isAlive) {return;}
+        if(!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){return;}
         if(value.isPressed)
         {
             // Add vertical jump speed velocity to the player when space bar is pressed.
@@ -83,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
     {
         /*  If the player is not touching the ladder layer then set the player gravity back to normal 
             set the climbing animation to false and return from the function. */
-        if (!myCollider.IsTouchingLayers(LayerMask.GetMask("Ladder"))) 
+        if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ladder"))) 
         { 
             myRigidbody.gravityScale = playerGravity;
             myAnimator.SetBool("isClimbing", false);
@@ -99,5 +106,13 @@ public class PlayerMovement : MonoBehaviour
 
         bool playerHasVerticalSpeed = Mathf.Abs(myRigidbody.velocity.y) > Mathf.Epsilon;
         myAnimator.SetBool("isClimbing", playerHasVerticalSpeed);
+    }
+
+    void Die() 
+    {
+        if(myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")))
+        {
+            isAlive = false;
+        }
     }
 }
