@@ -10,6 +10,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float runSpeed = 10f;
     [SerializeField] float jumpSpeed = 23f;
     [SerializeField] float climbSpeed = 7.5f;
+    [SerializeField] Vector2 deathKick = new(10f, 10f);
+    [SerializeField] GameObject bullet;
+    [SerializeField] Transform gun;
     float playerGravity;
     bool isAlive = true;
     Vector2 moveInput;
@@ -53,6 +56,12 @@ public class PlayerMovement : MonoBehaviour
             // Add vertical jump speed velocity to the player when space bar is pressed.
             myRigidbody.velocity += new Vector2(0f, jumpSpeed);
         }
+    }
+
+    void OnFire(InputValue value)
+    {
+        if(!isAlive) {return;}
+        Instantiate(bullet, gun.position, transform.rotation);
     }
 
     void Run()
@@ -110,9 +119,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Die() 
     {
-        if(myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")))
+        if(myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies", "Hazards")))
         {
             isAlive = false;
+            myAnimator.SetTrigger("Dying");
+            myRigidbody.velocity = deathKick;
         }
     }
 }
