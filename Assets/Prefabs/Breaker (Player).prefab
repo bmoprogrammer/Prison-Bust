@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 7365930358917123373}
   m_Layer: 8
   m_Name: Breaker (Player)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,7 +130,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1342255881
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 1505332522, guid: fd1a0c86aabcdd547bb063b74321a343, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -266,8 +266,8 @@ MonoBehaviour:
   jumpSpeed: 23
   climbSpeed: 7.5
   deathKick: {x: 20, y: 20}
-  bullet: {fileID: 0}
-  gun: {fileID: 0}
+  bullet: {fileID: 55519248952468231, guid: 0c8ad75f9f45a7b4da372e29a8ca3c5a, type: 3}
+  gun: {fileID: 7290260042973412791}
 --- !u!114 &7365930358917123373
 MonoBehaviour:
   m_ObjectHideFlags: 0
