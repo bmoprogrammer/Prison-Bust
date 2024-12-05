@@ -10,8 +10,9 @@ public class CoinPickup : MonoBehaviour
     bool wasCollected = false;  
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        // Have audio clip play when coin is picked up and destroy the game object.
-        if (other.tag == "Player" && !wasCollected)
+        /*  If the player object interacts with the coin and is alive and the coin has not been collected,
+            have audio clip play when coin is picked up, add points to score, and destroy the game object. */
+        if (other.tag == "Player" && !wasCollected && FindObjectOfType<PlayerMovement>().isAlive)
         {
             wasCollected = true;
             FindObjectOfType<GameSession>().AddToScore(pointsForPickup);

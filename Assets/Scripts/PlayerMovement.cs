@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject bullet;
     [SerializeField] Transform gun;
     float playerGravity;
-    bool isAlive = true;
+    public bool isAlive = true;
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
     Animator myAnimator;
@@ -117,6 +117,8 @@ public class PlayerMovement : MonoBehaviour
         myAnimator.SetBool("isClimbing", playerHasVerticalSpeed);
     }
 
+    /*  When the player touches either an enemy or a hazard, then set isAlive to false, trigger the dying 
+        give the body some kickback velocity and process the players death in the game session file.*/
     void Die() 
     {
         if(myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies", "Hazards")))

@@ -20,7 +20,7 @@ public class GameSession : MonoBehaviour
         // Using FindObjectsOfType to find multiple instances of an object instead of just the first
         int numGameSessions = FindObjectsOfType<GameSession>().Length;
 
-        // If there are more than one game session objects then destroy them.
+        // If there are more than one game session objects then destroy them. If not, keep the current session.
         if (numGameSessions > 1)
             Destroy(gameObject);
         else
@@ -29,16 +29,20 @@ public class GameSession : MonoBehaviour
 
     void Start()
     {
+        // On start, convert the player lives and score integers to strings to display on UI.
         livesText.text = playerLives.ToString();
         scoreText.text = score.ToString();
     }
 
+    // Function to add score to current score and updating value
     public void AddToScore(int pointsGained)
     {
         score += pointsGained;
         scoreText.text = score.ToString();
     }
 
+    // When the player dies, if their live count is higher than 1 then start the death pause coroutine.
+    // Otherwise reset the game session back to the beginning.
     public void ProcessPlayerDeath()
     {
         if (playerLives > 1)
@@ -47,6 +51,7 @@ public class GameSession : MonoBehaviour
             ResetGameSession();
     }
 
+    // Reset the scene persistence, load level 1, and destroy the current game session to create a new one.
     private void ResetGameSession()
     {
         FindObjectOfType<ScenePersist>().ResetScenePersist();
@@ -54,6 +59,9 @@ public class GameSession : MonoBehaviour
         Destroy(gameObject);
     }
 
+    /*  Created this coroutine for the player to process they have died instead of death being instant.
+        When the player does die, reduce player lives by 1, update the live counter on UI, and reload the
+        current level. */
     IEnumerator DeathPause()
     {
         yield return new WaitForSecondsRealtime(respawnTimer);
