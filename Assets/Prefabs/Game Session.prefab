@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8036229ab1faca48b4e04589c58d2e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLives: 3
+  respawnTimer: 1
